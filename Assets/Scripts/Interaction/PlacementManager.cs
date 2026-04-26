@@ -15,6 +15,8 @@ public class PlacementManager : MonoBehaviour
     [Header("Placement Settings")]
     [SerializeField] private bool useSpawnPointDefault = true;
     [SerializeField] private Vector3 previewOffset = Vector3.zero;
+    [SerializeField] private float rotationStep = 15f;
+    private float currentPreviewYRotation = 0f;
 
     private FurnitureItemData currentPendingItemData;
     private GameObject currentPreviewObject;
@@ -42,6 +44,7 @@ public class PlacementManager : MonoBehaviour
         isInPlacementMode = true;
 
         DestroyCurrentPreviewIfAny();
+        currentPreviewYRotation = 0f;
         CreatePreviewObject();
 
         if (helperHintManager != null)
@@ -64,7 +67,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         Vector3 spawnPosition = GetCurrentPlacementPosition();
-        Quaternion spawnRotation = Quaternion.identity;
+        Quaternion spawnRotation = Quaternion.Euler(0f, currentPreviewYRotation, 0f);
 
         GameObject placedObject = Instantiate(
             currentPendingItemData.prefab,
@@ -72,6 +75,8 @@ public class PlacementManager : MonoBehaviour
             spawnRotation,
             furnitureRoot
         );
+
+        placedObject.transform.localScale = Vector3.one * 0.5f;
 
         FurnitureInstance instance = placedObject.GetComponent<FurnitureInstance>();
         if (instance == null)
@@ -84,6 +89,9 @@ public class PlacementManager : MonoBehaviour
 
         DestroyCurrentPreviewIfAny();
         isInPlacementMode = false;
+
+        currentPendingItemData = null;
+        currentPreviewYRotation = 0f;
 
         if (selectionManager != null)
         {
@@ -115,9 +123,17 @@ public class PlacementManager : MonoBehaviour
         currentPreviewObject = Instantiate(
             currentPendingItemData.prefab,
             previewPosition,
-            Quaternion.identity,
+            Quaternion.Euler(0f, currentPreviewYRotation, 0f),
             placementPreviewRoot
         );
+
+        if (currentPreviewObject == null)
+        {
+            Debug.LogError("Preview object was not created.");
+            return;
+        }
+
+        currentPreviewObject.transform.localScale = Vector3.one * 0.5f;
 
         currentPreviewObject.name = $"Preview_{currentPendingItemData.displayName}";
 
@@ -169,4 +185,36 @@ public class PlacementManager : MonoBehaviour
             }
         }
     }
+
+    public void RotatePreviewLeft()
+    {
+        if (!isInPlacementMode || currentPreviewObject == null)
+        {
+            Debug.Log("Rotate ignored: no active preview.");
+            return;
+        }
+
+        RotatePreview(-rotationStep);
+    }
+
+    public void RotatePreviewRight()
+    {
+        if (!isInPlacementMode || currentPreviewObject == null)
+        {
+            Debug.Log("Rotate ignored: no active preview.");
+            return;
+        }
+
+        RotatePreview(rotationStep);
+    }
+
+    private void RotatePreview(float amount)
+    {
+        if (!isInPlacementMode || currentPreviewObject == null) return;
+
+        currentPreviewYRotation += amount;
+        currentPreviewObject.transform.rotation = Quaternion.Euler(0f, currentPreviewYRotation, 0f);
+    }
+
+
 }

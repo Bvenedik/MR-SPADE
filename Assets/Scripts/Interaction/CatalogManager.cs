@@ -89,6 +89,7 @@ public class CatalogManager : MonoBehaviour
 
     private void OnFurnitureItemClicked(FurnitureItemData itemData)
     {
+        Debug.Log("Clicked furniture item: " + itemData.displayName);
         if (placementManager == null)
         {
             Debug.LogWarning("CatalogManager: PlacementManager is not assigned.");
