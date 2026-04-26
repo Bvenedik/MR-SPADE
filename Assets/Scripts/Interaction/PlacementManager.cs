@@ -16,6 +16,10 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] private bool useSpawnPointDefault = true;
     [SerializeField] private Vector3 previewOffset = Vector3.zero;
     [SerializeField] private float rotationStep = 15f;
+
+    [Header("UI")]
+    [SerializeField] private GameObject actionPanel;
+
     private float currentPreviewYRotation = 0f;
 
     private FurnitureItemData currentPendingItemData;
@@ -29,6 +33,10 @@ public class PlacementManager : MonoBehaviour
         if (helperHintManager != null)
         {
             helperHintManager.SetIdleHint();
+        }
+        if (actionPanel != null)
+        {
+            actionPanel.SetActive(false);
         }
     }
 
@@ -46,6 +54,11 @@ public class PlacementManager : MonoBehaviour
         DestroyCurrentPreviewIfAny();
         currentPreviewYRotation = 0f;
         CreatePreviewObject();
+
+        if (actionPanel != null)
+        {
+            actionPanel.SetActive(true);
+        }
 
         if (helperHintManager != null)
         {
@@ -76,7 +89,7 @@ public class PlacementManager : MonoBehaviour
             furnitureRoot
         );
 
-        placedObject.transform.localScale = Vector3.one * 0.5f;
+        placedObject.transform.localScale = Vector3.one * 0.7f;
 
         FurnitureInstance instance = placedObject.GetComponent<FurnitureInstance>();
         if (instance == null)
@@ -102,6 +115,10 @@ public class PlacementManager : MonoBehaviour
         {
             helperHintManager.SetEditHint();
         }
+        if (actionPanel != null)
+        {
+            actionPanel.SetActive(false);
+        }
     }
 
     public void CancelPlacement()
@@ -113,6 +130,10 @@ public class PlacementManager : MonoBehaviour
         if (helperHintManager != null)
         {
             helperHintManager.SetIdleHint();
+        }
+        if (actionPanel != null)
+        {
+            actionPanel.SetActive(false);
         }
     }
 
@@ -133,7 +154,7 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
-        currentPreviewObject.transform.localScale = Vector3.one * 0.5f;
+        currentPreviewObject.transform.localScale = Vector3.one * 0.7f;
 
         currentPreviewObject.name = $"Preview_{currentPendingItemData.displayName}";
 

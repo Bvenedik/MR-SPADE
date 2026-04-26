@@ -8,8 +8,8 @@ public class HelperHintManager : MonoBehaviour
 
     [Header("Default Messages")]
     [SerializeField] private string idleMessage = "Choose a furniture item to begin.";
-    [SerializeField] private string placementMessage = "Preview the furniture and confirm placement.";
-    [SerializeField] private string editMessage = "Use the controls to rotate, scale, or recolor the selected object.";
+    [SerializeField] private string placementMessage = "Rotate the object, then place or cancel.";
+[SerializeField] private string editMessage = "Furniture placed. Select another item to continue.";
     [SerializeField] private string noSelectionMessage = "No furniture selected.";
 
     public void SetIdleHint()

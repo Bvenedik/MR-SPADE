@@ -45,18 +45,18 @@ public class FurnitureSelectionManager : MonoBehaviour
 
         if (CurrentSelectedObject == null)
         {
-            selectedItemText.text = "Selected: None";
+            selectedItemText.text = "Selected item: None";
             return;
         }
 
         FurnitureInstance instance = CurrentSelectedObject.GetComponent<FurnitureInstance>();
         if (instance != null && !string.IsNullOrWhiteSpace(instance.displayName))
         {
-            selectedItemText.text = $"Selected: {instance.displayName}";
+            selectedItemText.text = $"Selected item: {instance.displayName}";
         }
         else
         {
-            selectedItemText.text = $"Selected: {CurrentSelectedObject.name}";
+            selectedItemText.text = $"Selected item: {CurrentSelectedObject.name}";
         }
     }
 }
